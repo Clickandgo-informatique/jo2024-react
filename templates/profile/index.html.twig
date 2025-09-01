@@ -1,0 +1,16 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Profil de
+	{{ app.user.nickname }}
+{% endblock %}
+
+{% block body %}
+<main class="container">
+	<h1>Profil de
+		{{ app.user.nickname }}</h1>
+	<p>Email :
+		{{ app.user.email }}</p>
+	<p>Rôle :
+		{{ app.user.roles|join(', ') }}</p>
+</main>
+{% endblock %}

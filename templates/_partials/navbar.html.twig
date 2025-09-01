@@ -1,0 +1,32 @@
+<nav class="navbar">
+
+	<a href="{{path('app_main')}}">Accueil</a>
+	<div class="connexion">
+
+		{% if app.user %}
+			<div class="mb-3">
+				Vous êtes connecté(e) en tant que
+				{{ app.user.userIdentifier }},
+				<a href="{{ path('app_logout') }}">
+					<i class="fa fa-sign-out" aria-hidden="true"></i>Déconnexion</a>
+			</div>
+			<a href="{{ path('app_profile_index') }}">
+				<i class="fa fa-user" aria-hidden="true"></i>
+				Mon profil
+			</a>
+			{% if is_granted('ROLE_ADMIN') %}
+				<a href="{{ path('app_admin_index') }}">
+					<i class="fa fa-cog" aria-hidden="true"></i>
+					Administration
+				</a>
+			{% endif %}
+		{% else %}
+			<a href="{{path('app_login')}}">
+				<i class="fa fa-sign-in" aria-hidden="true"></i>
+				Se connecter</a>
+		{% endif %}
+	</div>
+</nav>
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('assets/css/navbar.css') }}">
+{% endblock %}
