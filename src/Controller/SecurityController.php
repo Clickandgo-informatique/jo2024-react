@@ -2,9 +2,15 @@
 
 namespace App\Controller;
 
+use App\Form\ResetPasswordRequestFormType;
+use App\Repository\UsersRepository;
+use App\Service\JWTService;
+use App\Service\SendEmailService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
@@ -28,5 +34,69 @@ class SecurityController extends AbstractController
     public function logout(): void
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+    }
+
+    #[Route(path: '/mot-de-passe-oublie', name: 'forgotten_password')]
+    public function forgottenPassword(
+        Request $request,
+        UsersRepository $usersRepo,
+        JWTService $jwt,
+        UrlGeneratorInterface $urlGenerator,
+        SendEmailService $mailer
+
+    ): Response {
+        $form = $this->createForm(ResetPasswordRequestFormType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $usersRepo->findOneByEmail($form->get('email')->getData());
+
+            //On vérifie que l'utilisateur existe
+            if ($user) {
+
+                //On génère un nouveau token
+                //Header
+                $header = [
+                    'typ' => 'JWT',
+                    'alg' => 'HS256'
+                ];
+
+                //Payload
+                $payload = [
+                    'user_id' => $user->getId(),
+                ];
+
+                //On génère le token
+                $token = $jwt->generate($header, $payload, $this->getParameter('app.jwtsecret'), 10800); // 3h de validité
+
+                // Envoyer un email avec un lien de réinitialisation
+
+                $url = $this->generateUrl('reset_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+
+                $mailer->send(
+                    'no-reply-reservations-jo2024@jo2024.fr',
+                    $user->getEmail(),
+                    'Réinitialisation de votre mot de passe',
+                    'password_reset',
+                    compact('url', 'user')
+                );
+
+                $this->addFlash('success', 'Un email de réinitialisation de mot de passe vous a été envoyé.');
+                return $this->redirectToRoute('app_login');
+            } else {
+                //L'utilisateur est introuvable
+                $this->addFlash('danger', 'Cette adresse email est inconnue.');
+
+                return $this->redirectToRoute('app_login');
+            }
+        }
+        return $this->render('security/reset_password_request.html.twig', [
+            'requestPassForm' => $form->createView(),
+        ]);
+    }
+    #[Route(path: '/mot-de-passe-oublie/{token}', name: 'reset_password')]
+    public function resetPassword(string $token): Response
+    {
+        // Vérifier le token et permettre à l'utilisateur de réinitialiser son mot de passe
     }
 }
