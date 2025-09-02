@@ -6,7 +6,7 @@
 		{% if app.user %}
 			<div class="mb-3">
 				Vous êtes connecté(e) en tant que
-				{{ app.user.userIdentifier }},
+				<span class="nickname">{{ app.user.userIdentifier }}</span>,
 				<a href="{{ path('app_logout') }}">
 					<i class="fa fa-sign-out" aria-hidden="true"></i>Déconnexion</a>
 			</div>
@@ -24,6 +24,9 @@
 			<a href="{{path('app_login')}}">
 				<i class="fa fa-sign-in" aria-hidden="true"></i>
 				Se connecter</a>
+			<a href="{{path('app_register')}}">
+				<i class="fa fa-user-plus" aria-hidden="true"></i>
+				S'inscrire</a>
 		{% endif %}
 	</div>
 </nav>

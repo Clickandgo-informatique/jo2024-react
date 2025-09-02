@@ -1,0 +1,5 @@
+<h1>Activation de votre compte sur reservations-jo-2024</h1>
+<p>Bonjour {{ user.getNickname() }},</p>
+<p>Pour activer votre compte, veuillez cliquer sur le lien suivant :</p>
+<p><a href="{{ absolute_url(path('verify_user', {token: token})) }}">Lien</a></p>{{token}}
+<p>Merci</p>
