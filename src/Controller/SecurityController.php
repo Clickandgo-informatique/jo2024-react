@@ -2,13 +2,16 @@
 
 namespace App\Controller;
 
+use App\Form\ResetPasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
 use App\Repository\UsersRepository;
 use App\Service\JWTService;
 use App\Service\SendEmailService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -22,14 +25,14 @@ class SecurityController extends AbstractController
         //     return $this->redirectToRoute('target_path');
         // }
 
-        // get the login error if there is one
+        // Obtenir l'erreur de connexion s'il y en a une
         $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
+        // Obtenir le dernier nom d'utilisateur saisi par l'utilisateur
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
-
+    //Route permettant la déconnexion de l'utilisateur
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
     {
@@ -94,9 +97,47 @@ class SecurityController extends AbstractController
             'requestPassForm' => $form->createView(),
         ]);
     }
+
     #[Route(path: '/mot-de-passe-oublie/{token}', name: 'reset_password')]
-    public function resetPassword(string $token): Response
+    public function resetPassword(string $token, JWTService $jwt, UsersRepository $usersRepo, EntityManagerInterface $em, Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
         // Vérifier le token et permettre à l'utilisateur de réinitialiser son mot de passe
+
+        // On vérifie si le token est valide (cohérent, pas expiré et signature correcte)
+        if ($jwt->isValid($token) && !$jwt->isExpired($token) && $jwt->check($token, $this->getParameter('app.jwtsecret'))) {
+            // Le token est valide
+            // On récupère les données (payload)
+            $payload = $jwt->getPayload($token);
+
+            // On récupère le user
+            $user = $usersRepo->find($payload['user_id']);
+
+
+            // On vérifie qu'on a bien un user
+            if ($user) {
+                $form = $this->createForm(ResetPasswordFormType::class);
+                $form->handleRequest($request);
+
+                //On crée et envoie le formulaire de réinitialisation
+                if ($form->isSubmitted() && $form->isValid()) {
+                    //On crée et encrypte le nouveau mot de passe
+                    $user->setPassword(
+                        $passwordHasher->hashPassword($user, $form->get('password')->getData())
+                    );
+                    //On enregistre en bdd le mot de passe
+                    $em->flush();
+                    //On affiche un message de succès
+                    $this->addFlash('success', 'Mot de passe mis à jour avec succès ! Vous pouvez maintenant vous connecter.');
+                    return $this->redirectToRoute('app_login');
+                }
+                //On affiche le formulaire de réinitialisation
+                return $this->render('security/reset_password.html.twig', [
+                    'resetPassForm' => $form->createView(),
+                ]);
+            }
+        }
+        //On affiche un message d'erreur si le token est invalide
+        $this->addFlash('danger', 'Le token est invalide ou a expiré');
+        return $this->redirectToRoute('app_login');
     }
 }
