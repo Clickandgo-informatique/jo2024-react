@@ -1,0 +1,23 @@
+<div class="subnav">
+{% if app.user %}	
+		<div class="connected">
+			Vous êtes connecté(e) en tant que &nbsp;
+			<span class="nickname">{{ app.user.userIdentifier }}</span>
+		</div>
+		<a class="nav-link" href="{{ path('app_profile_index') }}">
+			<i class="fa fa-user" aria-hidden="true"></i>
+			Mon profil
+		</a>
+		{% if is_granted('ROLE_ADMIN') %}
+			<a class="nav-link" href="{{ path('app_admin_index') }}">
+				<i class="fa fa-cog" aria-hidden="true"></i>
+				Administration
+			</a>
+		{% endif %}
+	{% else %}
+		<p class="text-center">Bonjour visiteur, vous n'êtes pas encore connecté(e).</p>
+	{% endif %}
+</div>
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('assets/css/subnav.css') }}">
+{% endblock %}
