@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+	{{title}}
+{% endblock %}
+{% block body %}
+	{% block form %}
+		{{ form_start(form) }}
+		<h1 class="text-center">{{ title }}</h1>
+
+		{{ form_row(form.code) }}
+		<strong>{{ form_row(form.intitule) }}</strong>
+		{{ form_row(form.description) }}
+		{{ form_row(form.prix) }}
+		<div class="row">
+			{{ form_row(form.date_debut) }}
+			{{ form_row(form.date_fin) }}
+		</div>
+		<div class="row">
+			{{ form_row(form.created_at) }}
+			{{ form_row(form.updated_at) }}
+		</div>
+
+		<div class="text-center">
+			<button type="submit" class="btn btn-primary">Enregistrer</button>
+			<a href="{{ path('app_offres_index') }}" class="btn btn-secondary">Retour à la liste</a>
+		</div>
+		{{ form_end(form) }}
+	{% endblock %}
+{% endblock %}
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('assets/css/form.css') }}">
+{% endblock %}
