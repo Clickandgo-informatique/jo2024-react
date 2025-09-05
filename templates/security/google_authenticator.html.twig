@@ -9,8 +9,10 @@
 		</div>
 	</div>
 	<h2 class="text-center">Vérification du code</h2>
-	<form id="google2faverify-form">
-		<input type="text" id="google2fa_code_input" placeholder="Entrez le code">
-		<button type="submit">Vérifier</button>
+	<form method="post">
+		{{ form_start(form) }}
+		{{ form_row(form.code) }}
+		<button class="btn btn-primary" type="submit">Vérifier le code</button>
+		{{ form_end(form) }}
 	</form>
 {% endblock %}
