@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+	<h1 class="text-center">Google Authenticator</h1>
+	<div id="qrcode">
+		<p>Code actuel :
+			{{ currentOtp }}</p>
+		<div id="qrCode">
+			<img src="data:image/png;base64,{{ qrCode }}" alt="QR Code">
+		</div>
+	</div>
+	<h2 class="text-center">Vérification du code</h2>
+	<form id="google2faverify-form">
+		<input type="text" id="google2fa_code_input" placeholder="Entrez le code">
+		<button type="submit">Vérifier</button>
+	</form>
+{% endblock %}
