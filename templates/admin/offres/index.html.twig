@@ -6,7 +6,13 @@
 {% block body %}
 	<div class="container my-5">
 		<h1 class="text-center">Gestion des offres</h1>
+{# Compteur offres et pages #}
 
+{% set start = (offres.currentPageNumber - 1) * offres.itemNumberPerPage + 1 %}
+{% set end = (offres.currentPageNumber * offres.itemNumberPerPage) > offres.getTotalItemCount ? offres.getTotalItemCount : (offres.currentPageNumber * offres.itemNumberPerPage) %}
+<div class="current-range">
+    Afficher {{ start }} à {{ end }} sur {{ offres.getTotalItemCount }}
+</div>
 		<table class="table table-striped">
 			<thead>
 				<tr>
@@ -47,6 +53,10 @@
 		</table>
 
 		<a href="#" class="btn btn-success">Ajouter une nouvelle offre</a>
+		{# Affiche la  navigation #}
+		<div class="navigation">
+			{{ knp_offres_render(offres) }}
+		</div>
 	</div>
 {% endblock %}
 {% block stylesheets %}

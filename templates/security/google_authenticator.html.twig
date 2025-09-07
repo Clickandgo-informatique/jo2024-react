@@ -9,10 +9,13 @@
 		</div>
 	</div>
 	<h2 class="text-center">Vérification du code</h2>
-	<form method="post">
+	<form method="POST">
 		{{ form_start(form) }}
 		{{ form_row(form.code) }}
-		<button class="btn btn-primary" type="submit">Vérifier le code</button>
+		<button id="code-verify-btn" class="btn btn-primary" type="submit">Vérifier le code</button>
 		{{ form_end(form) }}
 	</form>
+	{% block javascripts %}
+		<script type="module" src="{{asset('assets/js/checkGoogle2FA.js')}}"></script>
+	{% endblock %}
 {% endblock %}
