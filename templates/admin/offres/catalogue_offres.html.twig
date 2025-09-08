@@ -1,0 +1,54 @@
+{% extends "base.html.twig" %}
+{% block title %}
+	Catalogue offres clients
+{% endblock %}
+{% block body %}
+	<main>
+		{% if offres %}
+			<div class="cards-container">
+				{% for offre in offres %}
+					<div class="card card-offre">
+						<div class="card-header">
+							<span class="dates-offres">Du
+								{{offre.dateDebut|date("d-m-Y H:i")}}
+								au
+								{{offre.dateFin|date("d-m-Y H:i")}}
+							</span>
+							<span class="intitule">
+								{{offre.intitule}}</span>
+						</div>
+						<div class="card-content">{{offre.description}}</div>
+						<div class="card-footer">
+							{% if not offre.isLocked %}
+
+								<div class="row">
+									<label for="inputNbrAdultes">Adultes :
+										<input type="number" name="inputNbrAdultes" id="inputNbrAdultes" value={{offre.nbrAdultes}}>
+									</label>
+									<label for="inputNbrEnfants">Enfants :
+										<input type="number" name="inputNbrEnfants" id="inputNbrEnfants" value={{offre.nbrEnfants}}>
+									</label>
+								</div>
+
+							{% else %}
+								<div class="row">
+									<span>Adultes :
+										{{offre.nbrAdultes}}</span>
+									<span>Enfants :
+										{{offre.nbrEnfants}}</span>
+								</div>
+							{% endif %}
+							<span class="prix text-right">{{offre.prix}}
+								€</span>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		{% else %}
+			Il n'existe aucune offre enregistrée dans la base de données
+		{% endif %}
+	</main>
+{% endblock %}
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{asset('assets/css/cards.css')}}">
+{% endblock %}

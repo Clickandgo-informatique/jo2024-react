@@ -1,20 +1,25 @@
 {% extends 'base.html.twig' %}
+{% block title %}
+	Authentification à double facteur
+{% endblock %}
 {% block body %}
-	<h1 class="text-center">Google Authenticator</h1>
-	<div id="qrcode">
-		<p>Code actuel :
-			{{ currentOtp }}</p>
-		<div id="qrCode">
-			<img src="data:image/png;base64,{{ qrCode }}" alt="QR Code">
+	<main>
+		<h1 class="text-center">Google Authenticator</h1>
+		<div id="qrcode">
+			<p>Code actuel :
+				{{ currentOtp }}</p>
+			<div id="qrCodeImg">
+				<img src="data:image/png;base64,{{ qrCode }}" alt="QR Code">
+			</div>
 		</div>
-	</div>
-	<h2 class="text-center">Vérification du code</h2>
-	<form method="POST">
-		{{ form_start(form) }}
-		{{ form_row(form.code) }}
-		<button id="code-verify-btn" class="btn btn-primary" type="submit">Vérifier le code</button>
-		{{ form_end(form) }}
-	</form>
+		<h2 class="text-center">Vérification du code</h2>
+		<form method="POST">
+			{{ form_start(form) }}
+			{{ form_row(form.code) }}
+			<button id="code-verify-btn" class="btn btn-primary" type="submit">Vérifier le code</button>
+			{{ form_end(form) }}
+		</form>
+	</main>
 	{% block javascripts %}
 		<script type="module" src="{{asset('assets/js/checkGoogle2FA.js')}}"></script>
 	{% endblock %}

@@ -38,6 +38,18 @@ class Offres
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
 
+    #[ORM\Column]
+    private ?int $nbr_adultes = null;
+
+    #[ORM\Column]
+    private ?int $nbr_enfants = null;
+
+    #[ORM\Column]
+    private ?bool $isLocked = false;
+
+    #[ORM\Column]
+    private ?bool $isPublished = null;
+
     public function __construct()
     {
         $this->created_at = new \DateTimeImmutable();
@@ -141,6 +153,54 @@ class Offres
     public function setUpdatedAt(?\DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getNbrAdultes(): ?int
+    {
+        return $this->nbr_adultes;
+    }
+
+    public function setNbrAdultes(int $nbr_adultes): static
+    {
+        $this->nbr_adultes = $nbr_adultes;
+
+        return $this;
+    }
+
+    public function getNbrEnfants(): ?int
+    {
+        return $this->nbr_enfants;
+    }
+
+    public function setNbrEnfants(int $nbr_enfants): static
+    {
+        $this->nbr_enfants = $nbr_enfants;
+
+        return $this;
+    }
+
+    public function isLocked(): ?bool
+    {
+        return $this->isLocked;
+    }
+
+    public function setIsLocked(bool $isLocked): static
+    {
+        $this->isLocked = $isLocked;
+
+        return $this;
+    }
+
+    public function isPublished(): ?bool
+    {
+        return $this->isPublished;
+    }
+
+    public function setIsPublished(bool $isPublished): static
+    {
+        $this->isPublished = $isPublished;
 
         return $this;
     }

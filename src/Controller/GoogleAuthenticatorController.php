@@ -3,10 +3,8 @@
 namespace App\Controller;
 
 use App\Service\TOTPService;
-use PragmaRX\Google2FA\Google2FA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,12 +16,11 @@ class GoogleAuthenticatorController extends AbstractController
     public function index(TOTPService $totpService, RequestStack $requestStack, Request $request): Response
     {
         $session = $requestStack->getSession();
-        //On démarre le processus TOTP
-        $totpService->startTOTP();
+
         $currentOtp = $session->get('currentOtp');
-        $qrCode = $session->get('qrCode');
         //On récupère le QRCode dans la session
         //On affiche la page du QRCode
+        $qrCode = $session->get('qrCode');
 
         //Création et traitement du formulaire de validation du code OTP
         $form = $this->createFormBuilder()
@@ -32,14 +29,20 @@ class GoogleAuthenticatorController extends AbstractController
             ])
             ->getForm();
         $form->handleRequest($request);
+
+        //Si l'appel vient d'une reqûete Ajax :
         if ($request->isXmlHttpRequest()) {
+            //On récupère le code introduit par l'utilisateur
             $code = $request->request->get('code');
-            $google2FASecret = $session->get('user')['google2FA_secret'];
-            $google2FA = $totpService->getGoogle2FA();
-            // dd($google2FA);
-            //boolean de validation Google Auth
-            $isValid = $google2FA->verifyKey($google2FASecret, $code);
-            // dd($isValid);
+            //On démarre le processus TOTP
+            $totpService->startTOTP();
+            //On interroge le service pour savoir si le code entré est valide
+            $verifyCodeResult = $totpService->checkEnteredCode($code);
+
+            //Si tous les tests sont passés, on compare le code entré avec celui en session
+            //On renvoie le résultat de la vérification en JSON pour traitement en Ajax
+            return $verifyCodeResult;
+
 
             // Vérification de la validité du format de code  entré dans l'input         
             // if (empty($data['code']) || !is_string($data['code']) || strlen($data['code']) !== 6 || !ctype_digit($data['code'])) {
@@ -50,9 +53,6 @@ class GoogleAuthenticatorController extends AbstractController
             //     $this->addFlash('error', 'Aucun utilisateur n\'a été trouvé en session.');
             //     return new JsonResponse(['result' => false]);
             // }
-            //Si tous les tests sont passés, on compare le code entré avec celui en session
-            //On renvoie le résultat de la vérification en JSON pour traitement en Ajax
-            return new JsonResponse(['code' => $code, 'result' => $isValid]);
         }
 
         return $this->render('security/google_authenticator.html.twig', [

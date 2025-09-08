@@ -30,7 +30,11 @@
 						<td>{{u.nickname}}</td>
 						<td>{{u.email}}</td>
 						<td>{{u.email}}</td>
-						<td>{{u.roles}}</td>
+						<td>
+							{% for r in u.roles %}
+								{{r|join(', ')}}
+							{% endfor %}
+						</td>
 					</tr>
 				{% endfor %}
 			</tbody>
