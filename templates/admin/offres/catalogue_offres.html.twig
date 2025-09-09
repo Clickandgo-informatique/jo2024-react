@@ -40,6 +40,8 @@
 							{% endif %}
 							<span class="prix text-right">{{offre.prix}}
 								€</span>
+							<a href="{{path('cart_add',{id:offre.id})}}" class="btn btn-primary">Ajouter au panier</a>
+
 						</div>
 					</div>
 				{% endfor %}
