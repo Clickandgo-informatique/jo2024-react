@@ -9,16 +9,14 @@
 		<h1 class="text-center">
 			<i class="fa-solid fa-cart-shopping"></i>Mon panier</h1>
 
-		{# Tableau contenant le panier et tout ses items depuis requête Ajax #}
-		<div class="cart-container">
+		{# Contenu requête dynamique en Ajax #}
+		<div class="ajax-reloaded-data">
 			{{include('_partials/_cart-items.html.twig')}}
-			{#Contenu Requête Ajax#}
 		</div>
-
+		{# Fin contenu requête Ajax #}
 	</main>
 {% endblock %}
-{% block stylesheets %}
-	<link rel="stylesheet" href="{{asset('assets/css/table.css')}}">
+{% block stylesheets %}<link rel="stylesheet" href="{{asset('assets/css/table.css')}}">
 {% endblock %}
 {% block javascripts %}
 	<script type="module" src="{{asset('assets/js/cart.js')}}"></script>

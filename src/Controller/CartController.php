@@ -4,9 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Offres;
 use App\Repository\OffresRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -17,8 +15,9 @@ class CartController extends AbstractController
 {
     //Affichage des détails du panier
     #[Route('/', 'index')]
-    public function index(SessionInterface $session, OffresRepository $offresRepo): Response
+    public function index(SessionInterface $session, OffresRepository $offresRepo, Request $request): Response
     {
+        $template = $request->isXmlHttpRequest() ? '_partials/_cart-items.html.twig' : 'cart/index.html.twig';
         $panier = $session->get('panier', []);
 
         //Initialisation des variables
@@ -35,44 +34,37 @@ class CartController extends AbstractController
 
             $total += $offre->getPrix() * $quantite;
         }
-        return $this->render('cart/index.html.twig', compact('data', 'total'));
+        return $this->render($template, compact('data', 'total'));
     }
 
     //Gestion des ajouts dans le panier
     #[Route('/add/{id}', 'add')]
-    public function add(Offres $offre, SessionInterface $session, Request $request): JsonResponse
+    public function add(Offres $offre, SessionInterface $session): Response
     {
-        //Vérification qu'il s'agît bien d'une requête Ajax
-        if ($request->isXmlHttpRequest()) {
 
-            //Récupération de l'id de l'offre
-            $id = $offre->getId();
+        //Récupération de l'id de l'offre
+        $id = $offre->getId();
 
-            //Récupération du panier si il existe déjà
-            $panier = $session->get('panier', []);
+        //Récupération du panier si il existe déjà
+        $panier = $session->get('panier', []);
 
-            //Ajout de l'offre dans le panier si non existante 
-            //ou bien l'on incrémente sa quantité
+        //Ajout de l'offre dans le panier si non existante 
+        //ou bien l'on incrémente sa quantité
 
-            if (empty($panier[$id])) {
-                $panier[$id] = 1;
-            } else {
-                $panier[$id]++;
-            }
-
-            $session->set('panier', $panier);
-
-            //Affichage du partial du panier en Ajax
-
-            return new JsonResponse(['content' => $this->renderView('_partials/_cart-items.html.twig')]);
+        if (empty($panier[$id])) {
+            $panier[$id] = 1;
         } else {
-            return new Jsonresponse('La reqûete doit s\'effectuer en Ajax');
+            $panier[$id]++;
         }
+
+        $session->set('panier', $panier);
+
+        return $this->redirectToRoute('cart_index');
     }
 
     //Gestion des suppressions d'offre dans le panier
     #[Route('/remove/{id}', 'remove')]
-    public function remove(Offres $offre, OffresRepository $offresRepo, EntityManagerInterface $em, SessionInterface $session, $id)
+    public function remove(Offres $offre, SessionInterface $session, $id)
     {
         //Récupération de l'id de l'offre
         $id = $offre->getId();
