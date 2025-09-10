@@ -4,54 +4,22 @@
 {% endblock %}
 {% block body %}
 	<main>
-		<h1 class="text-center"><i class="fa-solid fa-cart-shopping"></i>Mon panier</h1>
-		<table>
-			<thead>
-				<tr>
-					<th>Offre</th>
-					<th>Qté</th>
-					<th>Prix</th>
-					<th>Total</th>
-					<th>Action</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for element in data %}
-					<tr>
-						<td>{{element.offre.intitule}}</td>
-						<td>{{element.quantite}}</td>
-						<td>{{element.offre.prix}}
-							€</td>
-						<td>{{element.quantite * element.offre.prix}}
-							€</td>
-						<td>
-							<a href="#" class="btn btn-warning">&minus;</a>
-							<a href="#" class="btn btn-success">&plus;</a>
-							<a href="#" class="btn btn-danger">
-								<i class="fa-solid fa-trash-can"></i>
-							</a>
-						</td>
-					</tr>
-				{% else %}
-					<tr>
-						<td colspan="5">Votre panier est vide</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-			<tfoot>
-				<tr>
-					<td colspan="3">Total</td>
-					<td>{{total}} €</td>
-					<td>
-						<a href="#"class="btn btn-danger">
-							<i class="fa-solid fa-cart-shopping"></i>Vider le panier</a>
-					</td>
-				</tr>
-			</tfoot>
-		</table>
+		<a href="{{path('app_offres_catalogue')}}" class="btn btn-primary">
+			<i class="fa-solid fa-list"></i>Revenir à la liste d'offres</a>
+		<h1 class="text-center">
+			<i class="fa-solid fa-cart-shopping"></i>Mon panier</h1>
+
+		{# Tableau contenant le panier et tout ses items depuis requête Ajax #}
+		<div class="cart-container">
+			{{include('_partials/_cart-items.html.twig')}}
+			{#Contenu Requête Ajax#}
+		</div>
 
 	</main>
 {% endblock %}
 {% block stylesheets %}
 	<link rel="stylesheet" href="{{asset('assets/css/table.css')}}">
+{% endblock %}
+{% block javascripts %}
+	<script type="module" src="{{asset('assets/js/cart.js')}}"></script>
 {% endblock %}
