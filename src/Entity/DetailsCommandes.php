@@ -12,7 +12,7 @@ class DetailsCommandes
     private ?int $quantite = null;
 
     #[ORM\Column]
-    private ?int $prix = null;
+    private ?int $prix = 0;
 
     #[ORM\Id]
     #[ORM\ManyToOne(inversedBy: 'detailsCommandes')]

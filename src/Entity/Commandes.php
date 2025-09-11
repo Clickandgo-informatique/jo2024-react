@@ -28,12 +28,13 @@ class Commandes
     /**
      * @var Collection<int, DetailsCommandes>
      */
-    #[ORM\OneToMany(targetEntity: DetailsCommandes::class, mappedBy: 'commande', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: DetailsCommandes::class, mappedBy: 'commande', orphanRemoval: true, cascade: ['persist'])]
     private Collection $detailsCommandes;
 
     public function __construct()
     {
         $this->detailsCommandes = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -105,5 +106,17 @@ class Commandes
         }
 
         return $this;
+    }
+
+    public function getTotalCommande(): float
+    {
+        $totalLigne = $this->getDetailsCommandes();
+        $total = 0;
+
+        foreach ($totalLigne as $item) {
+            $total += $item->getPrix();
+        }
+
+        return $total;
     }
 }

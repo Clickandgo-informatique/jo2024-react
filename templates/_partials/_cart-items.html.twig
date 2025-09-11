@@ -14,13 +14,13 @@
 						<td>{{element.offre.intitule}}</td>
 						<td class="text-right">{{element.offre.prix}}€</td>
 						<td>
-							<a href="{{path('cart_remove',{id:element.offre.id})}}" class="btn btn-success text-decoration-none btn-remove-from-cart" data-url="/cart/remove/{{element.offre.id}}">&minus;</a>
+							<a href="{{path('app_cart_remove',{id:element.offre.id})}}" class="btn btn-success text-decoration-none btn-remove-from-cart" data-url="/cart/remove/{{element.offre.id}}">&minus;</a>
 							<span class="text-right">{{element.quantite}}</span>
-							<a href="{{path('cart_add',{id:element.offre.id})}}" class="btn btn-warning text-decoration-none btn-add-to-cart" data-url="/cart/add/{{element.offre.id}}">&plus;</a>
+							<a href="{{path('app_cart_add',{id:element.offre.id})}}" class="btn btn-warning text-decoration-none btn-add-to-cart" data-url="/cart/add/{{element.offre.id}}">&plus;</a>
 						</td>
 						<td class="text-right">{{element.quantite * element.offre.prix}}€</td>
 						<td>
-							<a href="{{path('cart_delete',{id:element.offre.id})}}" class="btn btn-danger btn-delete-from-cart" data-url="/cart/delete/{{element.offre.id}}">
+							<a href="{{path('app_cart_delete',{id:element.offre.id})}}" class="btn btn-danger btn-delete-from-cart" data-url="/cart/delete/{{element.offre.id}}">
 								<i class="fa-solid fa-trash-can"></i>
 							</a>
 						</td>
@@ -38,7 +38,7 @@
 	<td colspan="3">Total</td>
 	<td class="text-right">{{total}}€</td>{# Affichage du bouton de vidage de panier seulement si le total est > 0 #}{% if total>0 %}
 		<td>
-			<a href="{{path('cart_empty_cart')}}" class="btn btn-danger btn-empty-cart" data-url="/cart/cart-empty-cart">
+			<a href="{{path('app_cart_empty_cart')}}" class="btn btn-danger btn-empty-cart" data-url="/cart/cart-empty-cart">
 				<i class="fa-solid fa-cart-shopping"></i>Vider le panier</a>
 		</td>
 	{% endif %}

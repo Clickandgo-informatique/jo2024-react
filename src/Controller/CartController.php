@@ -59,7 +59,7 @@ class CartController extends AbstractController
 
         $session->set('panier', $panier);
 
-        return $this->redirectToRoute('cart_index');
+        return $this->redirectToRoute('app_cart_index');
     }
 
     //Gestion des suppressions d'offre dans le panier
@@ -85,7 +85,7 @@ class CartController extends AbstractController
         $session->set('panier', $panier);
 
         //Redirection vers la page du panier
-        return $this->redirectToRoute('cart_index');
+        return $this->redirectToRoute('app_cart_index');
     }
     //Gestion des suppressions d'offre dans le panier
     #[Route('/delete/{id}', 'delete')]
@@ -107,7 +107,7 @@ class CartController extends AbstractController
         $session->set('panier', $panier);
 
         //Redirection vers la page du panier
-        return $this->redirectToRoute('cart_index');
+        return $this->redirectToRoute('app_cart_index');
     }
 
     //Gestion de vidage panier
@@ -116,6 +116,6 @@ class CartController extends AbstractController
     {
         $session->remove('panier');
         //Redirection vers la page du panier
-        return $this->redirectToRoute('cart_index');
+        return $this->redirectToRoute('app_cart_index');
     }
 }

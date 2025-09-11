@@ -1,7 +1,37 @@
 {% extends 'base.html.twig' %}
 {% block title %}
-    Passer commande
+	Commandes en cours
 {% endblock %}
 {% block body %}
-    <h1 class="text-center">Passer commande</h1>
+	<main>
+		<h1 class="text-center">Mes commandes en cours</h1>
+
+		<table>
+			<thead>
+				<th>Référence</th>
+				<th>Date</th>
+				<th>Total</th>
+			</thead>
+			<tbody>
+				{% for c in commandes %}
+					<tr>
+						<td>
+							<a href="{{path('app_commandes_show',{id:c.id})}}">{{c.reference}}</a>
+						</td>
+						<td>
+							{{c.createdAt|date('d/m/Y H:i')}}
+						</td>
+
+						<td>{{c.totalCommande}}€</td>
+
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+	</main>
+
+{% endblock %}
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{asset('assets/css/table.css')}}">
 {% endblock %}
