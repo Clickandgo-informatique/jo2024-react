@@ -4,6 +4,9 @@
 			Vous êtes connecté(e) en tant que &nbsp;
 			<span class="nickname">{{ app.user.userIdentifier }}</span>
 		</div>
+		<div class="cart">
+		<a href="{{path('app_cart_index')}}"><i class="fa-solid fa-basket-shopping"></i>Mon panier</a>
+		</div>
 		<a class="nav-link" href="{{ path('app_profile_index') }}">
 			<i class="fa fa-user" aria-hidden="true"></i>
 			Mon profil
