@@ -4,25 +4,36 @@
 {% endblock %}
 {% block body %}
 	<main>
-		<h1 class="text-center">Mes commandes en cours</h1>
-
+		<h1 class="text-center"><i class="fa-solid fa-list-check"></i>Mes commandes en cours</h1>
+		<p class="text-center">{{ commandes|length }} commandes enregistrées</p>
 		<table>
 			<thead>
 				<th>Référence</th>
 				<th>Date</th>
 				<th>Total</th>
+				<th>Etat</th>
 			</thead>
 			<tbody>
 				{% for c in commandes %}
 					<tr>
 						<td>
-							<a href="{{path('app_commandes_show',{id:c.id})}}">{{c.reference}}</a>
+							<a href="{{path('app_commandes_show',{id:c.id})}}"><i class="fa-solid fa-folder-open"></i>{{c.reference}}</a>
 						</td>
-						<td>
+						<td class="text-right">
 							{{c.createdAt|date('d/m/Y H:i')}}
 						</td>
 
-						<td>{{c.totalCommande}}€</td>
+						<td class="text-right">{{c.totalCommande}}€</td>
+						<td>
+							{% if c.payeeLe is null%}
+								<a href="#" class="btn btn-primary">
+									<i class="fa-regular fa-credit-card"></i>Procéder au paiement</a>
+							{% else %}
+								<p class="text-green">
+									<i class="fa-regular fa-circle-check"></i>Payée le
+									{{c.payeeLe|date('d-m-Y à H:i:s')}}</p>
+							{% endif %}
+						</td>
 
 					</tr>
 				{% endfor %}

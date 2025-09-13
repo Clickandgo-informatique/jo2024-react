@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Offres;
 use App\Repository\OffresRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -117,5 +118,19 @@ class CartController extends AbstractController
         $session->remove('panier');
         //Redirection vers la page du panier
         return $this->redirectToRoute('app_cart_index');
+    }
+
+    //Actualisation du comptage d'articles du panier (Ajax)
+    #[Route('/update-cart-articles-count', name: 'app_cart_articles_count')]
+    public function updateCartArticlesCount(Request $request, SessionInterface $session): JsonResponse
+    {
+        $cartArticlesCount = $session->get('panier');
+        dd($cartArticlesCount);
+        //On s'assure que la requête soit une requête Ajax
+        // if ($request->isXmlHttpRequest()) {
+        //     return new JsonResponse('requête ajax');
+        // } else {
+        //     return new JsonResponse('requête non ajax');
+        // }
     }
 }

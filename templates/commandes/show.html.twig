@@ -3,8 +3,53 @@
 	Commande
 {% endblock %}
 {% block body %}
-	<h1 class="text-center">
-		Détails de la commande
-		{{commande.reference}}
-	</h1>
+	<main>
+		<h1 class="text-center">
+			Détails de la commande
+			{{commande.reference}}<br>
+			le
+			{{commande.createdAt|date("d-m-Y à H:i:s")}}
+		</h1>
+		<table>
+			<thead>
+				<th>Etat</th>
+				<th>Intitule</th>
+				<th>Total ligne</th>
+			</thead>
+			<tbody>
+				{% for ligne in commande.detailsCommandes %}
+					<tr>
+						<td>{{ligne.offres.intitule}}</td>
+						<td class="text-right">{{ligne.prix}}€</td>
+					</tr>
+				{% endfor %}
+				<tr>
+					<td>Total</td>
+					<td class="text-right">
+						<strong>{{commande.totalCommande}}€</strong>
+					</td>
+				</tr>
+			</tbody>
+			<tr>
+				{% if commande.payeeLe is null %}
+					<td class="text-red">En attente de paiement
+					</td>
+					<td>
+						<a href="#" class="btn btn-primary">
+							<i class="fa-regular fa-credit-card"></i>Procéder au paiement</a>
+					</td>
+
+				{% else %}
+					<td>
+						<p class="text-green">
+							<i class="fa-regular fa-circle-check"></i>Payée le
+							{{commande.payeeLe|date('d/m/Y H:i')}}</p>
+					</td>
+				{% endif %}
+			</tr>
+
+		</table>
+	</main>
+{% endblock %}
+{% block stylesheets %}<link rel="stylesheet" href="{{asset('assets/css/table.css')}}">
 {% endblock %}

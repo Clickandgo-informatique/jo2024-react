@@ -31,6 +31,9 @@ class Commandes
     #[ORM\OneToMany(targetEntity: DetailsCommandes::class, mappedBy: 'commande', orphanRemoval: true, cascade: ['persist'])]
     private Collection $detailsCommandes;
 
+    #[ORM\Column(nullable:true)]
+    private ?\DateTimeImmutable $payee_le = null;
+
     public function __construct()
     {
         $this->detailsCommandes = new ArrayCollection();
@@ -118,5 +121,17 @@ class Commandes
         }
 
         return $total;
+    }
+
+    public function getPayeeLe(): ?\DateTimeImmutable
+    {
+        return $this->payee_le;
+    }
+
+    public function setPayeeLe(\DateTimeImmutable $payee_le): static
+    {
+        $this->payee_le = $payee_le;
+
+        return $this;
     }
 }

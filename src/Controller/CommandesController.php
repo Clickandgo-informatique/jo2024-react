@@ -80,13 +80,13 @@ class CommandesController extends AbstractController
         return $this->render('commandes/index.html.twig', compact('commandes'));
     }
 
-    //Affichage d'une commande individuelle
-    #[Route('afficher-commande/{id}','show')]
+    //Affichage d'une commande individuelle et paiement
+    #[Route('/afficher-commande/{id}', 'show')]
     public function show($id, CommandesRepository $commandesRepo): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $commande = $commandesRepo->find($id);
-
+        
         return $this->render('commandes/show.html.twig', compact('commande'));
     }
 }
