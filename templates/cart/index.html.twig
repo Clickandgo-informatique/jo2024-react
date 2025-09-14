@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block title %}
-	<i class="fa-solid fa-cart-shopping"></i>Mon panier
+	Mon panier
 {% endblock %}
 {% block body %}
 	<main>
@@ -9,12 +9,14 @@
 		<h1 class="text-center">
 			<i class="fa-solid fa-cart-shopping"></i>Mon panier</h1>
 
-		{# Contenu requête dynamique en Ajax #}
+		{# Lignes panier :Contenu requête dynamique en Ajax #}
 		<div class="ajax-reloaded-data">
 			{{include('_partials/_cart-items.html.twig')}}
 		</div>
 		{# Fin contenu requête Ajax #}
-		<a href="{{path('app_commandes_ajout')}}" class="btn btn-primary"><i class="fa-solid fa-circle-check"></i>Valider le panier</a>
+
+		<a href="{{path('app_commandes_ajout')}}" class="btn btn-primary">
+			<i class="fa-solid fa-circle-check"></i>Valider le panier</a>
 	</main>
 {% endblock %}
 {% block stylesheets %}<link rel="stylesheet" href="{{asset('assets/css/table.css')}}">

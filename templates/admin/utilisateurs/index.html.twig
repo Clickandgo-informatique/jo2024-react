@@ -3,45 +3,57 @@
 	Liste des utilisateurs
 {% endblock %}
 {% block body %}
-	<h1 class="text-center">Liste des utilisateurs</h1>
-	{% if utilisateurs %}
+	<main>
+		<h1 class="text-center">
+			<i class="fa-solid fa-users"></i>Liste des utilisateurs</h1>
+		{% if utilisateurs %}
 
-		<table>
-			<thead>
-				<tr>
-					<th></th>
-					<th></th>
-					<th scope="col">Pseudo</th>
-					<th scope="col">Email</th>
-					<th scope="col">Vérifié</th>
-					<th scope="col">Rôles</th>
-				</tr>
-			</thead>
-
-			<tbody>
-				{% for u in utilisateurs %}
+			<table>
+				<thead>
 					<tr>
-						<td>
-							<a href="{{path('App_utilisateurs_edit',{id:u.id})}}">Editer</a>
-						</td>
-						<td>
-							<a href="#">Supprimer</a>
-						</td>
-						<td>{{u.nickname}}</td>
-						<td>{{u.email}}</td>
-						<td>{{u.email}}</td>
-						<td>
-							{% for r in u.roles %}
-								{{r|join(', ')}}
-							{% endfor %}
-						</td>
+						<th></th>
+						<th></th>
+						<th scope="col">Pseudo</th>
+						<th scope="col">Email</th>
+						<th scope="col">Vérifié</th>
+						<th scope="col">Rôles</th>
+						<th scope="col">Crée le</th>
 					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	{% else %}
-		<p class="text-center">Il n'existe encore aucun utilisateur enregistré dans la base de données</p>
-	{% endif %}
+				</thead>
+
+				<tbody>
+					{% for u in utilisateurs %}
+						<tr>
+							<td class="text-center">
+								<a class="btn btn-primary" href="{{path('app_utilisateurs_edit',{id:u.id})}}">
+									<i class="fa-solid fa-pen-to-square"></i>
+								</a>
+							</td>
+							<td class="text-center">
+								<a class="btn btn-danger" href="#">
+									<i class="fa-solid fa-trash-can"></i>
+								</a>
+							</td>
+							<td>
+								<strong>{{u.nickname}}</strong>
+							</td>
+							<td>{{u.email}}</td>
+							<td class="text-center">{{u.isVerified ? '<span class="text-green"><i class="fa-solid fa-check"></i>Oui</span>':'<span class="text-red"><i class="fa-regular fa-circle-xmark"></i>Non</span>'}}
+							</td>
+							<td>
+								{% for r in u.roles %}
+									{{r|join(', ')}}
+								{% endfor %}
+							</td>
+							<td class="text-muted text-right">{{u.createdAt|date('d-m-Y à H:i:s')}}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		{% else %}
+			<p class="text-center">Il n'existe encore aucun utilisateur enregistré dans la base de données</p>
+		{% endif %}
+	</main>
 {% endblock %}
 {% block stylesheets %}<link rel="stylesheet" href="{{asset('assets/css/table.css')}}">
 {% endblock %}

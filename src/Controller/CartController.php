@@ -24,6 +24,7 @@ class CartController extends AbstractController
         //Initialisation des variables
         $data = [];
         $total = 0;
+        $totalItems = 0;
 
         foreach ($panier as $id => $quantite) {
             $offre = $offresRepo->find($id);
@@ -34,8 +35,10 @@ class CartController extends AbstractController
             ];
 
             $total += $offre->getPrix() * $quantite;
+            $totalItems += $quantite;
         }
-        return $this->render($template, compact('data', 'total'));
+     
+        return $this->render($template, compact('data', 'total', 'totalItems'));
     }
 
     //Gestion des ajouts dans le panier
@@ -59,6 +62,8 @@ class CartController extends AbstractController
         }
 
         $session->set('panier', $panier);
+
+        $this->addFlash('success','Votre offre a bien été ajoutée au panier.');
 
         return $this->redirectToRoute('app_cart_index');
     }
@@ -84,6 +89,8 @@ class CartController extends AbstractController
             }
         }
         $session->set('panier', $panier);
+
+        $this->addFlash('success','Votre offre a bien été retirée du panier.');
 
         //Redirection vers la page du panier
         return $this->redirectToRoute('app_cart_index');
@@ -121,7 +128,7 @@ class CartController extends AbstractController
     }
 
     //Actualisation du comptage d'articles du panier (Ajax)
-    #[Route('/update-cart-articles-count', name: 'app_cart_articles_count')]
+    #[Route('/update-cart-items-count', name: 'app_cart_items_count')]
     public function updateCartArticlesCount(Request $request, SessionInterface $session): JsonResponse
     {
         $cartArticlesCount = $session->get('panier');

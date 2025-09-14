@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/admin/utilisateurs', 'App_utilisateurs')]
+#[Route('/admin/utilisateurs', 'app_utilisateurs')]
 class UsersController extends AbstractController
 {
     //Liste des utilisateurs par ordre ascendant

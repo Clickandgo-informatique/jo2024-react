@@ -1,11 +1,8 @@
 <div class="subnav">
-{% if app.user %}	
+	{% if app.user %}
 		<div class="connected">
 			Vous êtes connecté(e) en tant que &nbsp;
 			<span class="nickname">{{ app.user.userIdentifier }}</span>
-		</div>
-		<div class="cart">
-		<a href="{{path('app_cart_index')}}"><i class="fa-solid fa-basket-shopping"></i>Mon panier</a>
 		</div>
 		<a class="nav-link" href="{{ path('app_profile_index') }}">
 			<i class="fa fa-user" aria-hidden="true"></i>
@@ -20,6 +17,10 @@
 	{% else %}
 		<p class="text-center">Bonjour visiteur, vous n'êtes pas encore connecté(e).</p>
 	{% endif %}
+	<div class="cart">
+		<a href="{{path('app_cart_index')}}">
+			<i class="fa-solid fa-basket-shopping"></i>Mon panier</a>
+	</div>
 </div>
 {% block stylesheets %}
 	<link rel="stylesheet" href="{{ asset('assets/css/subnav.css') }}">

@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+	{{title}}
+{% endblock %}
+{% block body %}
+	<main>
+		<h1 class="text-center">
+			<i class="fa-solid fa-circle-plus"></i>
+			{{title}}</h1>
+		{{ form_start(form) }}
+		{{ form_row(form.intitule) }}
+		{{ form_row(form.background_color) }}
+		{{ form_row(form.icone) }}
+		{{ form_row(form.slug) }}
+		<button type="submit" class="btn btn-primary">
+			<i class="fa-solid fa-floppy-disk"></i>Enregistrer</button>
+		{{ form_end(form) }}
+
+	</main>
+{% endblock %}
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{asset('assets/css/form.css')}}">
+{% endblock %}

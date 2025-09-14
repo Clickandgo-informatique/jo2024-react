@@ -19,14 +19,22 @@
 		{{ include('_partials/_navbar.html.twig') }}
 		{{ include('_partials/_subnav.html.twig') }}
 
+		{% if is_granted('ROLE_ADMIN') %}
+		{{ include('_partials/_sidenav.html.twig') }}			
+		{% endif %}
+
 		{# Flashbags #}
 		{% for label, messages in app.flashes %}
 			<div class="alert alert-{{ label }}">
 				{% for message in messages %}
 					{{ message|raw }}
 				{% endfor %}
+				<span class="btn-close">&times;</span>
 			</div>
 		{% endfor %}
-		{% block body %}{% endblock %}
+		{% block body %}
+		
+		{% endblock %}
 	</body>
 </html>
+<script type="module" src="{{asset('assets/js/main.js')}}"></script>

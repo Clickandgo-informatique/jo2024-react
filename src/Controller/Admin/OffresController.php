@@ -9,13 +9,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
+
 // use Knp\Component\Pager\PaginatorInterface;
 
-#[Route('admin/offres', name: 'app_offres')]
+
 final class OffresController extends AbstractController
 {
     //Liste des offres dans le backend
-    #[Route('/', name: '_index')]
+    #[Route('admin/offres', name: 'app_offres_index')]
     public function index(OffresRepository $offresRepo, Request $request): Response
     {
         //     //On vérifie que l'utilisateur est admin
@@ -36,19 +38,19 @@ final class OffresController extends AbstractController
     }
 
     //Catalogue des offres de tickets pour les clients 
-    #[Route('/catalogue-offres-clients', '_catalogue')]
+    #[Route('/catalogue-offres-clients', 'app_offres_catalogue')]
     public function catalogue(OffresRepository $offresRepo): Response
     {
         $offres = $offresRepo->findBy(['isPublished' => true], ['date_debut' => 'ASC']);
 
-        return $this->render('admin/offres/catalogue_offres.html.twig', compact('offres'));
+        return $this->render('offres/catalogue_offres.html.twig', compact('offres'));
     }
 
     //Édition d'une offre
-    #[Route('/edit/{id}', name: '_edit', requirements: ['id' => '\d+'])]
-    public function edit(OffresRepository $offresRepo, int $id, Request $request, EntityManagerInterface $em): Response
+    #[Route('admin/edit/{slug}', name: 'app_offres_edit')]
+    public function edit(OffresRepository $offresRepo, string $slug, Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
-        $offre = $offresRepo->find($id);
+        $offre = $offresRepo->findOneBy(['slug' => $slug]);
         if (!$offre) {
             throw $this->createNotFoundException("Offre non trouvée");
         }
@@ -57,6 +59,11 @@ final class OffresController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            //On sluggifie sur le champ de formulaire "intitule"
+            $slug = $form->get('intitule')->getData();
+
+            $offre->setSlug($slugger->slug($slug));
             $em->persist($offre);
             $em->flush();
 

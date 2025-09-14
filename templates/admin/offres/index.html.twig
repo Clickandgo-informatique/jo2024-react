@@ -5,7 +5,7 @@
 
 {% block body %}
 	<div class="container my-5">
-		<h1 class="text-center">Gestion des offres</h1>
+		<h1 class="text-center"><i class="fa-solid fa-clipboard-list"></i>Gestion des offres</h1>
 {# Compteur offres et pages #}
 
 {# {% set start = (offres.currentPageNumber - 1) * offres.itemNumberPerPage + 1 %}
@@ -40,7 +40,7 @@
 						<td class='date-italic muted'>{{ offre.createdAt ? offre.createdAt|date('d/m/Y H:i') : 'N/A' }}</td>
 						<td class='date-italic muted'>{{ offre.updatedAt ? offre.updatedAt|date('d/m/Y H:i') : 'N/A' }}</td>
 						<td>
-							<a href="{{ path('app_offres_edit', { id: offre.id }) }}" class="btn btn-sm btn-primary">Éditer</a>
+							<a href="{{ path('app_offres_edit', { slug: offre.slug }) }}" class="btn btn-sm btn-primary">Éditer</a>
 							<a href="#" class="btn btn-sm btn-danger">Supprimer</a>
 						</td>
 					</tr>

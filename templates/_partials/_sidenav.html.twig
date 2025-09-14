@@ -1,0 +1,20 @@
+<div class="sidenav">
+	<details>
+		<summary>
+			<i class="fa-solid fa-users"></i>Utilisateurs
+		</summary>
+		<a href="{{path('app_utilisateurs_index')}}">
+			<i class="fa-solid fa-list"></i>Liste</a>
+	</details>
+	<details>
+		<summary>Offres</summary>
+        <a href="{{path('app_offres_index')}}">
+			<i class="fa-solid fa-list"></i>Liste</a>
+	</details>
+	<details>
+		<summary>Essai</summary>
+	</details>
+</div>
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{asset('assets/css/sidenav.css')}}">
+{% endblock %}
