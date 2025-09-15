@@ -2,16 +2,16 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Offres;
 use App\Form\OffresFormType;
 use App\Repository\OffresRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
-
-// use Knp\Component\Pager\PaginatorInterface;
 
 
 final class OffresController extends AbstractController
@@ -25,13 +25,13 @@ final class OffresController extends AbstractController
         //         $this->addFlash('danger', "Vous n'avez pas le droit d'accéder à cette page sans vous être connecté en tant qu'administrateur.");
         //         return $this->redirectToRoute('app_login');
         //     }
-
         $offres = $offresRepo->findBy([], ['intitule' => 'ASC']);
-        //     $offres = $paginator->paginate(
-        //         $data,
-        //         $request->query->getInt('page', 1),
-        //         12
-        //     );
+
+        // $offres = $paginator->paginate(
+        //     $data,
+        //     $request->query->getInt('page', 1),
+        //     12
+        // );
         return $this->render('admin/offres/index.html.twig', [
             'offres' => $offres,
         ]);
@@ -44,6 +44,34 @@ final class OffresController extends AbstractController
         $offres = $offresRepo->findBy(['isPublished' => true], ['date_debut' => 'ASC']);
 
         return $this->render('offres/catalogue_offres.html.twig', compact('offres'));
+    }
+
+    //Créer une offre
+    #[Route('admin/offres/ajout', name: 'app_offres_new')]
+    public function new(Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
+    {
+        $offre = new Offres();
+        $title = "Créer une offre";
+        $form = $this->createForm(OffresFormType::class, $offre);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            //On sluggifie sur le champ de formulaire "intitule"
+            $slug = $form->get('intitule')->getData();
+
+            $offre->setSlug($slugger->slug($slug));
+            $em->persist($offre);
+            $em->flush();
+
+            $this->addFlash('success', "L'offre a bien été enregistrée dans la base.");
+            return $this->redirectToRoute('app_offres_index');
+        }
+        return $this->render('admin/offres/edit.html.twig', [
+            'offre' => $offre,
+            'title' => $title,
+            'form' => $form->createView(),
+        ]);
     }
 
     //Édition d'une offre

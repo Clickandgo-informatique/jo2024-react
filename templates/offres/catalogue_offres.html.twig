@@ -49,6 +49,9 @@
 		{% else %}
 			Il n'existe aucune offre enregistrée dans la base de données
 		{% endif %}
+		<div class="pagination">
+		{# {{ knp_pagination_render(offres) }} #}
+		</div>
 	</main>
 {% endblock %}
 {% block stylesheets %}

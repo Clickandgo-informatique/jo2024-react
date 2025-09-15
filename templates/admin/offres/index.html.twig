@@ -4,60 +4,64 @@
 {% endblock %}
 
 {% block body %}
-	<div class="container my-5">
-		<h1 class="text-center"><i class="fa-solid fa-clipboard-list"></i>Gestion des offres</h1>
-{# Compteur offres et pages #}
+	<main>
+		<div class="container my-5">
+			<h1 class="text-center">
+				<i class="fa-solid fa-clipboard-list"></i>Gestion des offres</h1>
+			<a href="{{path('app_offres_new')}}" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i>Ajouter une nouvelle offre</a>
+			{# Compteur offres et pages #}
 
-{# {% set start = (offres.currentPageNumber - 1) * offres.itemNumberPerPage + 1 %}
-{% set end = (offres.currentPageNumber * offres.itemNumberPerPage) > offres.getTotalItemCount ? offres.getTotalItemCount : (offres.currentPageNumber * offres.itemNumberPerPage) %} #}
-<div class="current-range">
-    {# Afficher {{ start }} à {{ end }} sur {{ offres.getTotalItemCount }} #}
-</div>
-		<table class="table table-striped">
-			<thead>
-				<tr>
-					<th scope="col">ID</th>
-					<th scope="col">Code</th>
-					<th scope="col">Intitulé</th>
-					<th scope="col">Prix</th>
-					<th scope="col">Date de début</th>
-					<th scope="col">Date de fin</th>
-					<th scope="col">Créée le :
-					</th>
-					<th scope="col">Modifiée le :</th>
-					<th scope="col">Actions</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for offre in offres %}
+			{# {% set start = (offres.currentPageNumber - 1) * offres.itemNumberPerPage + 1 %}
+						{% set end = (offres.currentPageNumber * offres.itemNumberPerPage) > offres.getTotalItemCount ? offres.getTotalItemCount : (offres.currentPageNumber * offres.itemNumberPerPage) %} #}
+			<div
+				class="current-range">{# Afficher {{ start }} à {{ end }} sur {{ offres.getTotalItemCount }} #}
+			</div>
+			<table class="table table-striped">
+				<thead>
 					<tr>
-						<td class="text-right">{{ offre.id }}</td>
-						<td class="text-right">{{ offre.code }}</td>
-						<td>{{ offre.intitule }}</td>
-						<td>{{ offre.prix }}</td>
-						<td class='date-italic'>{{ offre.dateDebut ? offre.dateDebut|date('d/m/Y H:i') : 'N/A' }}</td>
-						<td class='date-italic'>{{ offre.dateFin ? offre.dateFin|date('d/m/Y H:i') : 'N/A' }}</td>
-						<td class='date-italic muted'>{{ offre.createdAt ? offre.createdAt|date('d/m/Y H:i') : 'N/A' }}</td>
-						<td class='date-italic muted'>{{ offre.updatedAt ? offre.updatedAt|date('d/m/Y H:i') : 'N/A' }}</td>
-						<td>
-							<a href="{{ path('app_offres_edit', { slug: offre.slug }) }}" class="btn btn-sm btn-primary">Éditer</a>
-							<a href="#" class="btn btn-sm btn-danger">Supprimer</a>
-						</td>
+						<th scope="col">ID</th>
+						<th scope="col">Code</th>
+						<th scope="col">Intitulé</th>
+						<th scope="col">Prix</th>
+						<th scope="col">Date de début</th>
+						<th scope="col">Date de fin</th>
+						<th scope="col">Créée le :
+						</th>
+						<th scope="col">Modifiée le :</th>
+						<th scope="col">Actions</th>
 					</tr>
-				{% else %}
-					<tr>
-						<td colspan="6" class="text-center">Aucune offre disponible.</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					{% for offre in offres %}
+						<tr>
+							<td class="text-right">{{ offre.id }}</td>
+							<td class="text-right">{{ offre.code }}</td>
+							<td><strong>{{ offre.intitule }}</strong></td>
+							<td>{{ offre.prix }}</td>
+							<td class='date-italic'>{{ offre.dateDebut ? offre.dateDebut|date('d/m/Y H:i') : 'N/A' }}</td>
+							<td class='date-italic'>{{ offre.dateFin ? offre.dateFin|date('d/m/Y H:i') : 'N/A' }}</td>
+							<td class='date-italic muted'>{{ offre.createdAt ? offre.createdAt|date('d/m/Y H:i') : 'N/A' }}</td>
+							<td class='date-italic muted'>{{ offre.updatedAt ? offre.updatedAt|date('d/m/Y H:i') : 'N/A' }}</td>
+							<td>
+								<a href="{{ path('app_offres_edit', { slug: offre.slug }) }}" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
+								<a href="#" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i></a>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="6" class="text-center">Aucune offre disponible.</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
 
-		<a href="#" class="btn btn-success">Ajouter une nouvelle offre</a>
-		{# Affiche la  navigation #}
-		<div class="navigation">
-			{# {{ knp_offres_render(offres) }} #}
+
+			{# Affiche la  navigation #}
+			<div
+				class="navigation">{# {{ knp_offres_render(offres) }} #}
+			</div>
 		</div>
-	</div>
+	</main>
 {% endblock %}
 {% block stylesheets %}
 	<link rel="stylesheet" href="{{ asset('assets/css/table.css') }}">
